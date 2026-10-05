@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Talk Today Teacher Pay Portal</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:1100px;margin:auto;padding:18px}
+.card{background:#fff;border:1px solid #dbe3ef;border-radius:18px;padding:18px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+h1{font-size:1.35rem;margin:0}.muted{color:#6d7888}.tabs,.dates{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+button,select,input{font:inherit}.btn{border:1px solid #cfd8e6;background:#fff;border-radius:10px;padding:10px 14px;cursor:pointer}.btn.active{background:#172033;color:white}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}.stat{background:#fff;border:1px solid #dbe3ef;border-radius:14px;padding:14px}.stat b{font-size:1.45rem;display:block;margin-top:4px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}th,td{text-align:left;padding:11px;border-bottom:1px solid #e6ebf2}th{background:#f8fafc}.right{text-align:right}.hidden{display:none}
+.login{max-width:430px;margin:60px auto}.login input,.login select{width:100%;padding:11px;border:1px solid #cfd8e6;border-radius:10px;margin:6px 0 12px}
+.notice{background:#fff7dd;border:1px solid #f0d58a;padding:12px;border-radius:12px;margin:12px 0}
+.teacher-card{background:#fff;border:1px solid #dbe3ef;border-radius:14px;padding:14px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}table{font-size:.86rem}.hide-mobile{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="login" class="login card">
+<h1>Talk Today Teacher Pay</h1>
+<p class="muted">Private teacher view prototype</p>
+<div class="notice"><strong>Demo only:</strong> this GitHub Pages build does not yet provide production authentication. Do not use it for real teacher privacy until a secure backend is connected.</div>
+<label>View as</label>
+<select id="teacherSelect">
+<option>ADMIN</option><option>SIMO</option><option>NORA</option><option>BETTY</option><option>MERIAM</option><option>SOUHIR</option><option>YASSINE</option><option>ZINEB</option><option>ADNANE</option><option>LAMIAE</option>
+</select>
+<label>Demo PIN</label><input id="pin" type="password" inputmode="numeric" value="2026">
+<button class="btn active" id="enter">Enter demo</button>
+</section>
+
+<section id="app" class="hidden">
+<div class="top"><div><h1 id="title">Teacher Pay Portal</h1><div class="muted" id="subtitle"></div></div><button class="btn" id="logout">Log out</button></div>
+<div class="tabs"><button class="btn active" data-view="day">Day</button><button class="btn" data-view="week">Week</button><button class="btn" data-view="month">Month</button></div>
+<div class="dates"><button class="btn" data-date="2026-10-01">Oct 1</button><button class="btn active" data-date="2026-10-02">Oct 2</button></div>
+<div class="grid"><div class="stat"><span class="muted">Pay</span><b id="pay">0 MAD</b></div><div class="stat"><span class="muted">Classes</span><b id="classes">0</b></div><div class="stat"><span class="muted">Class-seats</span><b id="seats">0</b></div><div class="stat"><span class="muted">Teachers</span><b id="teachers">0</b></div></div>
+<div id="dayPanel"><table><thead><tr><th>Time</th><th>Teacher</th><th>Class</th><th class="right">Students</th><th class="right">Pay</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div id="weekPanel" class="hidden"><div id="teacherGrid" class="grid"></div></div>
+<div id="monthPanel" class="hidden"><div class="card"><h3>October 2026</h3><p>Oct 1: <strong>3,255 MAD</strong> · 15 classes · 201 class-seats</p><p>Oct 2: <strong>2,205 MAD</strong> · 10 classes · 133 class-seats</p><p class="muted">Later dates will populate automatically when the secure Google Sheets backend is connected.</p></div></div>
+<p class="muted" style="margin-top:14px">Rule: classes with 10 or fewer rostered students = 150 MAD flat. Otherwise 90 minutes × teacher hourly rate. Historical counts must come from the frozen daily Master/Class Count snapshot.</p>
+</section>
+</div>
+<script>
+const data={
+"2026-10-01":[
+["17:00","LAMIAE","PRE-A1 | KIDS 4–6 | M/TH 17:00",10,150],["17:00","MERIAM","PRE-A1 | KIDS 6–8 | M/TH 17:00",12,240],["17:00","SOUHIR","PRE-A1 | KIDS 7–9 | M/TH 17:00",14,195],["17:00","YASSINE","PRE-A1–A1 | KIDS 6–11 | M/TH 17:00",16,195],["17:00","SIMO","PRE-A1+–A1 | KIDS 7–9 | M/TH 17:00",11,225],["18:30","NORA","A1+–A2 | PRETEEN/TEEN 10–15 | M/TH 18:30",15,240],["18:30","SIMO","A1+–A2 | UPPER KIDS 10–12 | M/TH 18:30",15,225],["18:30","MERIAM","A1+–A2 | UPPER KIDS 9–13 | M/TH 18:30",15,240],["18:30","BETTY","B1–B1+ | TEEN+ | M/TH 18:30",12,255],["18:30","SOUHIR","PRE-A1+–A1 | UPPER KIDS 8–10 | M/TH 18:30",12,195],["20:00","NORA","A1–A1+ | TEENS 13–16 | M/TH 20:00",14,240],["20:00","ADNANE","A1–A1+ | TEENS 13–17 | M/TH 20:00 A",11,195],["20:00","SIMO","A1–A1+ | TEENS 13–17 | M/TH 20:00 B",12,225],["20:00","BETTY","B1–B1+ | TEENS 12–15 | M/TH 20:00",15,255],["20:00","ZINEB","PRE-A1–A1 | TEENS 13–14 | M/TH 20:00 A",11,225]],
+"2026-10-02":[
+["16:00","SOUHIR","PRE-A1 | EARLY KIDS 4–6 | T/F 16:00",12,195],["17:00","MERIAM","PRE-A1 | KIDS 7–9 | T/F 17:00",12,240],["17:00","YASSINE","PRE-A1 | KIDS 6–8 | T/F 17:00",8,150],["18:30","NORA","A1–A1+ | UPPER KIDS 10–13 | T/F 18:30",16,240],["18:30","BETTY","A1+–A2 | UPPER KIDS 10–13 | T/F 18:30",13,255],["18:30","SOUHIR","PRE-A1–A1 | KIDS 8–10 | T/F 18:30 B",14,195],["18:30","MERIAM","PRE-A1–A1 | UPPER KIDS 9–11 | T/F 18:30",14,240],["18:30","YASSINE","PRE-A1+–A1 | UPPER KIDS 9–11 | T/F 18:30",16,195],["20:00","NORA","A2–A2+ | TEENS 13–15 | T/F 20:00 A",17,240],["20:00","BETTY","A2–A2+ | TEENS 13–15 | T/F 20:00 B",11,255]]
+};
+let who="ADMIN",date="2026-10-02",view="day";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], money=n=>n.toLocaleString()+" MAD";
+function scoped(all){return who==="ADMIN"?all:all.filter(r=>r[1]===who)}
+function stats(rows){$("#pay").textContent=money(rows.reduce((a,r)=>a+r[4],0));$("#classes").textContent=rows.length;$("#seats").textContent=rows.reduce((a,r)=>a+r[3],0);$("#teachers").textContent=new Set(rows.map(r=>r[1])).size}
+function renderDay(){const rows=scoped(data[date]||[]);stats(rows);$("#rows").innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td class="right">${r[3]}</td><td class="right"><strong>${money(r[4])}</strong></td></tr>`).join("")||'<tr><td colspan="5">No classes for this teacher on this date.</td></tr>'}
+function renderWeek(){const rows=scoped(Object.values(data).flat());stats(rows);const g={};rows.forEach(r=>{g[r[1]]??={c:0,s:0,p:0};g[r[1]].c++;g[r[1]].s+=r[3];g[r[1]].p+=r[4]});$("#teacherGrid").innerHTML=Object.entries(g).map(([n,x])=>`<div class="teacher-card"><strong>${n}</strong><div style="font-size:1.4rem;margin-top:7px">${money(x.p)}</div><div class="muted">${x.c} classes · ${x.s} class-seats</div></div>`).join("")}
+function setView(v){view=v;$("#dayPanel").classList.toggle("hidden",v!=="day");$("#weekPanel").classList.toggle("hidden",v!=="week");$("#monthPanel").classList.toggle("hidden",v!=="month");$$("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(v==="day")renderDay();else if(v==="week")renderWeek();else stats(scoped(Object.values(data).flat()))}
+$("#enter").onclick=()=>{if($("#pin").value!=="2026"){alert("Wrong demo PIN");return}who=$("#teacherSelect").value;$("#login").classList.add("hidden");$("#app").classList.remove("hidden");$("#title").textContent=who==="ADMIN"?"Talk Today Payroll — Admin":who+" — My Pay";$("#subtitle").textContent=who==="ADMIN"?"All teachers":"Only "+who+"'s demo data is shown";renderDay()}
+$("#logout").onclick=()=>location.reload();
+$$("[data-view]").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+$$("[data-date]").forEach(b=>b.onclick=()=>{date=b.dataset.date;$$("[data-date]").forEach(x=>x.classList.toggle("active",x===b));renderDay()});
+</script>
+</body>
+</html>
